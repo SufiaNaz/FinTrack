@@ -3,7 +3,7 @@ import React from 'react'
 const App = () => {
   return (
     <div className='text-3xl text-purple-600'>
-      App
+      Tracker App
     </div>
   )
 }
