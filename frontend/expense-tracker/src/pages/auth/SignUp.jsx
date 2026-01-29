@@ -24,6 +24,7 @@ const SignUp = () => {
     if (password.length < 6)
       return alert("Password must be at least 6 characters");
 
+      
     alert("Form submitted successfully!");
   };
 

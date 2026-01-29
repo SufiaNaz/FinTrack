@@ -103,11 +103,10 @@ const Login = () => {
   </span>
 </li>
 
+<li style={{ "--i": 1 }}>
+  <button type="submit" className="submit-btn">LOGIN</button>
+</li>
 
-
-  <li style={{ "--i": 1 }}>
-    <button type="submit" className="submit-btn">LOGIN</button>
-  </li>
 </ul>
 
         </form>
@@ -115,6 +114,9 @@ const Login = () => {
         {/* small footer text */}
         <footer className="login-footer">
           <p>Don't have an account? <a href="/signup">Sign up</a></p>
+          <p className="forgot-password">
+    <a href="/forgot-password">Forgot password?</a>
+  </p>
         </footer>
       </div>
     </div>
