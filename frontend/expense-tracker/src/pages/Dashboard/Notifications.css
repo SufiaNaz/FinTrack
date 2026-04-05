@@ -1,0 +1,350 @@
+/* ── Topbar ── */
+.notif-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid #1a1a1a;
+    background: #0d0d0d;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.notif-page-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f5f5f5;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: -0.3px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.unread-badge {
+    font-size: 11px;
+    font-weight: 500;
+    background: rgba(16,185,129,0.15);
+    color: #10b981;
+    border: 1px solid rgba(16,185,129,0.3);
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+.notif-page-sub {
+    font-size: 12px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+    margin: 2px 0 0;
+}
+
+.refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #1a1a1a;
+    border: 1px solid #262626;
+    border-radius: 8px;
+    color: #9ca3af;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.refresh-btn:hover { color: #10b981; border-color: rgba(16,185,129,0.3); }
+.refresh-btn svg { width: 13px; height: 13px; }
+
+/* ── Content ── */
+.notif-content {
+    padding: 20px 24px;
+}
+
+.notif-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* ── Section Header ── */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e5e7eb;
+    font-family: "Poppins", sans-serif;
+}
+
+.section-count {
+    font-size: 11px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+}
+
+/* ── Notification List ── */
+.notif-list {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #1a1a1a;
+    transition: background 0.12s;
+}
+
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #181818; }
+
+.notif-item.unread {
+    background: rgba(16,185,129,0.03);
+    border-left: 2px solid #10b981;
+}
+
+.notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notif-icon svg { width: 15px; height: 15px; }
+
+.notif-icon.warning { background: rgba(251,191,36,0.12); color: #fbbf24; }
+.notif-icon.blue    { background: rgba(96,165,250,0.12);  color: #60a5fa; }
+.notif-icon.default { background: rgba(16,185,129,0.12);  color: #10b981; }
+
+.notif-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-top-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.notif-badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+.notif-badge.warning {
+    background: rgba(251,191,36,0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(251,191,36,0.2);
+}
+
+.notif-badge.blue {
+    background: rgba(96,165,250,0.12);
+    color: #60a5fa;
+    border: 1px solid rgba(96,165,250,0.2);
+}
+
+.notif-badge.default {
+    background: rgba(16,185,129,0.12);
+    color: #10b981;
+    border: 1px solid rgba(16,185,129,0.2);
+}
+
+.unread-dot {
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.notif-message {
+    font-size: 13px;
+    color: #d1d5db;
+    font-family: "Poppins", sans-serif;
+    line-height: 1.5;
+    margin: 0 0 5px;
+}
+
+.notif-time {
+    font-size: 11px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+}
+
+/* ── Empty ── */
+.notif-empty {
+    text-align: center;
+    padding: 48px 20px;
+    font-size: 13px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+}
+
+.notif-empty.error { color: #f87171; }
+
+.notif-empty-icon {
+    width: 44px;
+    height: 44px;
+    background: #1e1e1e;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+}
+
+.notif-empty-icon svg { width: 22px; height: 22px; color: #374151; }
+
+.notif-empty-hint {
+    font-size: 11px;
+    color: #374151;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+/* ── Email Section ── */
+.notif-card {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.notif-card-sub {
+    font-size: 12px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+    margin: 0 0 16px;
+    line-height: 1.5;
+}
+
+.notif-error {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.2);
+    color: #f87171;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 14px;
+}
+
+.notif-success {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: #10b981;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 14px;
+}
+
+.email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.efield-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.efield-group label {
+    font-size: 12px;
+    color: #9ca3af;
+    font-family: "Poppins", sans-serif;
+}
+
+.efield-group input,
+.efield-group textarea {
+    background: #1a1a1a;
+    border: 1px solid #262626;
+    border-radius: 8px;
+    color: #e5e7eb;
+    font-size: 13px;
+    font-family: "Poppins", sans-serif;
+    padding: 10px 12px;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.15s;
+}
+
+.efield-group input:focus,
+.efield-group textarea:focus { border-color: #10b981; }
+
+.send-email-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px;
+    border-radius: 8px;
+    border: none;
+    background: #10b981;
+    color: #052e16;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    margin-top: 2px;
+}
+
+.send-email-btn svg { width: 14px; height: 14px; }
+.send-email-btn:hover:not(:disabled) { opacity: 0.9; }
+.send-email-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.notif-info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 14px;
+    background: rgba(96,165,250,0.06);
+    border: 1px solid rgba(96,165,250,0.15);
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+
+.notif-info-box svg {
+    width: 14px;
+    height: 14px;
+    color: #60a5fa;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.notif-info-box p {
+    font-size: 11px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+    line-height: 1.5;
+    margin: 0;
+}

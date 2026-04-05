@@ -1,0 +1,296 @@
+/* ── Topbar ── */
+.ins-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid #1a1a1a;
+    background: #0d0d0d;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.ins-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f5f5f5;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+
+.ins-sub {
+    font-size: 12px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+    margin: 2px 0 0;
+}
+
+.generate-insights-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    background: #10b981;
+    border: none;
+    border-radius: 8px;
+    color: #052e16;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.generate-insights-btn svg { width: 15px; height: 15px; }
+.generate-insights-btn:hover:not(:disabled) { opacity: 0.9; }
+.generate-insights-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Spinner */
+.spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(5, 46, 22, 0.3);
+    border-top-color: #052e16;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Content ── */
+.ins-content {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── Info Banner ── */
+.ins-info-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(96,165,250,0.06);
+    border: 1px solid rgba(96,165,250,0.15);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.ins-info-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(96,165,250,0.12);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #60a5fa;
+}
+
+.ins-info-icon svg { width: 16px; height: 16px; }
+
+.ins-info-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e5e7eb;
+    font-family: "Poppins", sans-serif;
+    margin: 0 0 4px;
+}
+
+.ins-info-text {
+    font-size: 12px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Error ── */
+.ins-error {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.2);
+    color: #f87171;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: "Poppins", sans-serif;
+}
+
+/* ── Empty ── */
+.ins-empty {
+    text-align: center;
+    padding: 60px 0;
+    color: #4b5563;
+    font-size: 13px;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.ins-empty-icon {
+    width: 52px;
+    height: 52px;
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.ins-empty-icon svg { width: 26px; height: 26px; color: #374151; }
+
+.ins-empty-hint {
+    font-size: 11px;
+    color: #374151;
+    max-width: 320px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* ── Skeleton ── */
+.ins-skeleton-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ins-skeleton {
+    height: 80px;
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ── Header Row ── */
+.ins-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ins-count {
+    font-size: 12px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+}
+
+.regenerate-btn {
+    font-size: 12px;
+    color: #10b981;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: "Poppins", sans-serif;
+    padding: 0;
+}
+
+.regenerate-btn:hover { text-decoration: underline; }
+
+/* ── Insight Cards ── */
+.ins-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ins-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid;
+}
+
+.ins-card.success {
+    background: rgba(16,185,129,0.05);
+    border-color: rgba(16,185,129,0.2);
+}
+
+.ins-card.warning {
+    background: rgba(251,191,36,0.05);
+    border-color: rgba(251,191,36,0.2);
+}
+
+.ins-card.danger {
+    background: rgba(248,113,113,0.05);
+    border-color: rgba(248,113,113,0.2);
+}
+
+.ins-card.info {
+    background: rgba(96,165,250,0.05);
+    border-color: rgba(96,165,250,0.15);
+}
+
+.ins-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ins-card-icon svg { width: 16px; height: 16px; }
+
+.ins-card-icon.success { background: rgba(16,185,129,0.12); color: #10b981; }
+.ins-card-icon.warning { background: rgba(251,191,36,0.12);  color: #fbbf24; }
+.ins-card-icon.danger  { background: rgba(248,113,113,0.12); color: #f87171; }
+.ins-card-icon.info    { background: rgba(96,165,250,0.12);  color: #60a5fa; }
+
+.ins-card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.ins-card-message {
+    font-size: 13px;
+    color: #e5e7eb;
+    font-family: "Poppins", sans-serif;
+    line-height: 1.6;
+    margin: 0 0 6px;
+}
+
+.ins-card-time {
+    font-size: 11px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+}
+
+/* ── Footer Note ── */
+.ins-footer-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 11px;
+    color: #374151;
+    font-family: "Poppins", sans-serif;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 8px;
+}
+
+.ins-footer-note svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #4b5563;
+}

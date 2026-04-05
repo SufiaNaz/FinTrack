@@ -1,45 +1,56 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
+
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
-import Home from "./pages/Dashboard/Home";
-import Income from "./pages/Dashboard/Income";
-import Expense from "./pages/Dashboard/Expense";
 import ForgotPassword from "./pages/auth/ForgotPassword";
-import ResetPassword from './pages/auth/ResetPassword';
+import ResetPassword from "./pages/auth/ResetPassword";
+
+import Home from "./pages/Dashboard/Home";
+import Transactions from "./pages/Dashboard/Transactions";
+import Budget from "./pages/Dashboard/Budget";
+import Notifications from "./pages/Dashboard/Notifications";
+import Reports from "./pages/Dashboard/Reports";
+import Insights from "./pages/Dashboard/Insights";
+
 const App = () => {
-  return (
-    <div>
-      <Router>
-         <Routes>
-            <Route path="/" element={<Root />} />
-            <Route path="/login" exact element={<Login />} />
-            <Route path="/signup" exact element={<SignUp />} />
-            <Route path="/dashboard" exact element={<Home />} />
-            <Route path="/income" exact element={<Income />} />
-            <Route path="/expense" exact element={<Expense />} />
-            <Route path="/forgot-password" exact element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-         </Routes>
-      </Router>
-    </div>
-  );
+    return (
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    {/* Root redirect */}
+                    <Route path="/" element={<Root />} />
+
+                    {/* Public routes */}
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+                    {/* Protected routes — must be logged in */}
+                    <Route path="/dashboard" element={<PrivateRoute><Home /></PrivateRoute>} />
+                    <Route path="/transactions" element={<PrivateRoute><Transactions /></PrivateRoute>} />
+                    <Route path="/budget" element={<PrivateRoute><Budget /></PrivateRoute>} />
+                    <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
+                    <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
+                    <Route path="/insights" element={<PrivateRoute><Insights /></PrivateRoute>} />
+                    {/* More routes added as screens are built */}
+
+                    {/* 404 fallback */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
+    );
+};
+
+// Redirects based on auth state
+const Root = () => {
+    const token = localStorage.getItem("token");
+    return token ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
 };
 
 export default App;
-
-const Root = () => {
-  const isAuthenticated = !!localStorage.getItem("token");
-
-  return isAuthenticated ?
-  (
-    <Navigate to="/dashboard" />
-  ) : (
-    <Navigate to="/login" />
-  );
-};

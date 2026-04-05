@@ -1,0 +1,478 @@
+/* ── Topbar ── */
+.tx-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid #1a1a1a;
+    background: #0d0d0d;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.tx-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f5f5f5;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+
+.tx-sub {
+    font-size: 12px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+    margin: 2px 0 0;
+}
+
+.tx-topbar-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-income, .btn-expense {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.btn-income svg, .btn-expense svg { width: 14px; height: 14px; }
+
+.btn-income {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.btn-expense {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.btn-income:hover { background: rgba(16, 185, 129, 0.25); }
+.btn-expense:hover { background: rgba(248, 113, 113, 0.25); }
+
+/* ── Content ── */
+.tx-content {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ── Summary Strip ── */
+.tx-summary {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.summary-label {
+    font-size: 10px;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-family: "Poppins", sans-serif;
+}
+
+.summary-val {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e5e7eb;
+    font-family: "Poppins", sans-serif;
+}
+
+.summary-val.green { color: #10b981; }
+.summary-val.red   { color: #f87171; }
+
+.summary-divider {
+    width: 1px;
+    height: 32px;
+    background: #1e1e1e;
+}
+
+/* ── Filters ── */
+.tx-filters {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 14px 16px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-group label {
+    font-size: 11px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.filter-group select,
+.filter-group input[type="date"] {
+    background: #1a1a1a;
+    border: 1px solid #262626;
+    border-radius: 7px;
+    color: #e5e7eb;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    padding: 7px 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    border-color: #10b981;
+}
+
+.clear-btn {
+    padding: 7px 14px;
+    background: none;
+    border: 1px solid #262626;
+    border-radius: 7px;
+    color: #6b7280;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.clear-btn:hover { color: #f87171; border-color: #f87171; }
+
+/* ── Transaction List ── */
+.tx-list-card {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tx-list-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #1e1e1e;
+    font-size: 10px;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: "Poppins", sans-serif;
+}
+
+.tx-list-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #1a1a1a;
+    transition: background 0.12s;
+}
+
+.tx-list-row:last-child { border-bottom: none; }
+.tx-list-row:hover { background: #181818; }
+
+.tx-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tx-type-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tx-type-badge svg { width: 13px; height: 13px; }
+
+.tx-type-badge.income {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+}
+
+.tx-type-badge.expense {
+    background: rgba(248, 113, 113, 0.12);
+    color: #f87171;
+}
+
+.tx-desc {
+    font-size: 13px;
+    color: #e5e7eb;
+    font-family: "Poppins", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tx-cat-pill {
+    display: inline-block;
+    background: #1e1e1e;
+    color: #9ca3af;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+.tx-date {
+    font-size: 12px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+}
+
+.tx-amount {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+}
+
+.tx-amount.green { color: #10b981; }
+.tx-amount.red   { color: #f87171; }
+
+.delete-btn {
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #374151;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background 0.15s;
+}
+
+.delete-btn:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+.delete-btn svg { width: 14px; height: 14px; }
+
+/* ── Empty ── */
+.tx-empty {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 14px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.tx-empty.error { color: #f87171; }
+
+.inline-link {
+    background: none;
+    border: none;
+    color: #10b981;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: "Poppins", sans-serif;
+    text-decoration: underline;
+    padding: 0;
+}
+
+/* ── Modal ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+}
+
+.modal {
+    background: #161616;
+    border: 1px solid #262626;
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    color: #f5f5f5;
+}
+
+.modal-title.income { color: #10b981; }
+.modal-title.expense { color: #f87171; }
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.modal-close:hover { color: #e5e7eb; background: #1e1e1e; }
+.modal-close svg { width: 16px; height: 16px; }
+
+.form-error {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.2);
+    color: #f87171;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 16px;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 12px;
+    color: #9ca3af;
+    font-family: "Poppins", sans-serif;
+}
+
+.form-group input,
+.form-group select {
+    background: #1a1a1a;
+    border: 1px solid #262626;
+    border-radius: 8px;
+    color: #e5e7eb;
+    font-size: 13px;
+    font-family: "Poppins", sans-serif;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #10b981;
+}
+
+.modal-submit {
+    padding: 11px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: opacity 0.15s;
+}
+
+.modal-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.modal-submit.income {
+    background: #10b981;
+    color: #052e16;
+}
+
+.modal-submit.expense {
+    background: #f87171;
+    color: #fff;
+}
+
+/* ── Confirm Modal ── */
+.confirm-modal { max-width: 340px; }
+
+.confirm-text {
+    font-size: 13px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+    margin: 8px 0 20px;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.cancel-btn {
+    padding: 8px 18px;
+    background: none;
+    border: 1px solid #262626;
+    border-radius: 8px;
+    color: #9ca3af;
+    font-size: 13px;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+}
+
+.cancel-btn:hover { background: #1a1a1a; }
+
+.confirm-delete-btn {
+    padding: 8px 18px;
+    background: #f87171;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+}
+
+.confirm-delete-btn:hover { background: #ef4444; }
