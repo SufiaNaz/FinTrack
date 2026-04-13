@@ -11,7 +11,8 @@ const budgetRoutes       = require("./routes/budgetRoutes");
 const reportRoutes       = require("./routes/reportRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const insightRoutes      = require("./routes/insightRoutes");
-const adminRoutes        = require("./routes/adminRoutes");
+const adminRoutes      = require("./routes/adminRoutes");
+
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use("/api/v1/user/insights", insightRoutes);
 //                DELETE /api/v1/admin/user/:id
 //                GET    /api/v1/admin/transactions
 app.use("/api/v1/admin", adminRoutes);
+
 
 // ── Health check ───────────────────────────────────────────────────────────
 app.get("/api/v1/health", (req, res) => {

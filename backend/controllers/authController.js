@@ -51,9 +51,12 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
+        // Destructure out sensitive fields
+        const { password: _, resetPasswordToken, resetPasswordExpires, ...safeUser } = user._doc;
+
         res.status(200).json({
             id: user._id,
-            user,
+            user: safeUser,
             token: generateToken(user._id),
         });
     } catch (err) {
@@ -106,22 +109,22 @@ exports.forgotPassword = async (req, res) => {
         // ── Send email via Nodemailer ──────────────────────────────────────
         // Configure .env: EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS
         //
-        // const transporter = nodemailer.createTransport({
-        //     host: process.env.EMAIL_HOST,
-        //     port: process.env.EMAIL_PORT,
-        //     auth: {
-        //         user: process.env.EMAIL_USER,
-        //         pass: process.env.EMAIL_PASS,
-        //     },
-        // });
-        //
-        // await transporter.sendMail({
-        //     from: `"FinTrack" <${process.env.EMAIL_USER}>`,
-        //     to: user.email,
-        //     subject: "Password Reset Request",
-        //     html: `<p>Click the link below to reset your password (valid 1 hour):</p>
-        //            <a href="${resetUrl}">${resetUrl}</a>`,
-        // });
+         const transporter = nodemailer.createTransport({
+             host: process.env.EMAIL_HOST,
+             port: process.env.EMAIL_PORT,
+             auth: {
+                 user: process.env.EMAIL_USER,
+                 pass: process.env.EMAIL_PASS,
+             },
+         });
+        
+         await transporter.sendMail({
+             from: `"FinTrack" <${process.env.EMAIL_USER}>`,
+             to: user.email,
+             subject: "Password Reset Request",
+             html: `<p>Click the link below to reset your password (valid 1 hour):</p>
+                    <a href="${resetUrl}">${resetUrl}</a>`,
+         });
 
         // Temporary: return the URL directly (remove in production)
         res.status(200).json({
