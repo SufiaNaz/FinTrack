@@ -88,30 +88,22 @@ exports.getDashboard = async (req, res) => {
 };
 
 // ── GET /user/summary ──────────────────────────────────────────────────────
-// Returns: monthly income vs expense for the last 6 months (for charts)
+// Returns: monthly income vs expense for ALL time (frontend handles filtering)
 
 exports.getSummary = async (req, res) => {
-    const userId = req.user.id;
-
     try {
-        const sixMonthsAgo = new Date();
-        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
-        sixMonthsAgo.setDate(1);
-        sixMonthsAgo.setHours(0, 0, 0, 0);
-
         const summary = await Transaction.aggregate([
             {
                 $match: {
-                    userId: req.user._id,
-                    date: { $gte: sixMonthsAgo },
+                    userId: req.user._id,   // no date filter — return everything
                 },
             },
             {
                 $group: {
                     _id: {
-                        year: { $year: "$date" },
+                        year:  { $year:  "$date" },
                         month: { $month: "$date" },
-                        type: "$type",
+                        type:  "$type",
                     },
                     total: { $sum: "$amount" },
                 },
@@ -119,7 +111,7 @@ exports.getSummary = async (req, res) => {
             { $sort: { "_id.year": 1, "_id.month": 1 } },
         ]);
 
-        // Format into a cleaner shape: [{ month: "2025-04", income: X, expense: Y }]
+        // Shape: [{ month: "2025-04", income: X, expense: Y }, ...]
         const formatted = {};
         summary.forEach(({ _id, total }) => {
             const key = `${_id.year}-${String(_id.month).padStart(2, "0")}`;
@@ -127,7 +119,7 @@ exports.getSummary = async (req, res) => {
             formatted[key][_id.type] = total;
         });
 
-        res.status(200).json(Object.values(formatted));
+        res.status(200).json(Object.values(formatted).sort((a, b) => a.month.localeCompare(b.month)));
     } catch (err) {
         res.status(500).json({ message: "Error fetching summary", error: err.message });
     }

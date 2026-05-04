@@ -2,7 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 // Uncomment when nodemailer is configured:
-// const nodemailer = require("nodemailer");
+ const nodemailer = require("nodemailer");
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -126,13 +126,44 @@ exports.forgotPassword = async (req, res) => {
                     <a href="${resetUrl}">${resetUrl}</a>`,
          });
 
-        // Temporary: return the URL directly (remove in production)
+        // Temporary: return the URL directly (remove in production)  
         res.status(200).json({
             message: "If that email exists, a reset link has been sent",
             resetUrl, // REMOVE IN PRODUCTION
         });
     } catch (err) {
         res.status(500).json({ message: "Error sending reset email", error: err.message });
+    }
+};
+
+exports.resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    try {
+        // Hash the token from URL to compare with stored hash
+        const hashedToken = crypto
+            .createHash("sha256")
+            .update(token)
+            .digest("hex");
+
+        const user = await User.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }, // not expired
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: "Reset link is invalid or expired" });
+        }
+
+        user.password = password; // make sure your User model hashes on save
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.status(200).json({ message: "Password reset successful" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
     }
 };
 

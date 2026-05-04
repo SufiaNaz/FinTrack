@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
-
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
@@ -18,11 +17,12 @@ import Reports from "./pages/Dashboard/Reports";
 import Insights from "./pages/Dashboard/Insights";
 
 import AdminRoute from "./components/AdminRoute";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
-import AdminLogin from "./pages/Admin/AdminLogin";
 
 const App = () => {
     return (
+        
         <AuthProvider>
             <Router>
                 <Routes>
@@ -45,13 +45,14 @@ const App = () => {
                     <Route path="/insights" element={<PrivateRoute><Insights /></PrivateRoute>} />
                     {/* More routes added as screens are built */}
 
-                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
 
                     {/* 404 fallback */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Router>
         </AuthProvider>
+        
     );
 };
 

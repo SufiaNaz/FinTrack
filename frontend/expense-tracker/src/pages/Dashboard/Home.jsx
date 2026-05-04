@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     ResponsiveContainer, LineChart, Line, XAxis, YAxis,
@@ -21,18 +21,30 @@ const CATEGORY_COLORS = [
     "#a78bfa", "#fb923c", "#34d399", "#e879f9",
 ];
 
+const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
 const formatINR = (val) =>
     "Rs." + Number(val).toLocaleString("en-IN");
 
 const formatK = (val) =>
     val >= 1000 ? "Rs." + Math.round(val / 1000) + "k" : "Rs." + val;
 
+// Parse "YYYY-MM" string into { year, monthIndex }
+const parseMonth = (str) => ({
+    year: parseInt(str.slice(0, 4)),
+    monthIndex: parseInt(str.slice(5, 7)) - 1,
+});
+
 const Home = () => {
     const navigate = useNavigate();
     const [dashboard, setDashboard] = useState(null);
-    const [summary, setSummary] = useState([]);
+    const [summary, setSummary] = useState([]);  // full unfiltered list from API
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    // Chart filter state
+    const [selectedYear, setSelectedYear] = useState("all");   // "all" | "2025" | "2026" …
+    const [rangeMode, setRangeMode] = useState("6M");           // "6M" | "1Y" | "all"
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,6 +63,66 @@ const Home = () => {
         };
         fetchData();
     }, []);
+
+    // ── Derive available years from summary data ──────────────────────────────
+    const availableYears = useMemo(() => {
+        const years = [...new Set(summary.map((s) => s.month.slice(0, 4)))].sort();
+        return years;
+    }, [summary]);
+
+    // ── Build filtered lineData based on selectedYear + rangeMode ─────────────
+    const lineData = useMemo(() => {
+        let data = [...summary].sort((a, b) => a.month.localeCompare(b.month));
+
+        // 1. Filter by year if a specific year is selected
+        if (selectedYear !== "all") {
+            data = data.filter((s) => s.month.startsWith(selectedYear));
+        }
+
+        // 2. Apply range mode (only meaningful when no specific year or "all" year selected)
+        if (selectedYear === "all" && rangeMode !== "all") {
+            const now = new Date();
+            const monthsBack = rangeMode === "6M" ? 6 : 12;
+            const cutoff = new Date(now.getFullYear(), now.getMonth() - monthsBack, 1);
+        
+            data = data.filter((s) => {
+                const { year, monthIndex } = parseMonth(s.month);
+                return new Date(year, monthIndex, 1) >= cutoff;
+            });
+        }
+
+        return data.map((s) => {
+            const { monthIndex, year } = parseMonth(s.month);
+            return {
+                month: selectedYear === "all"
+                    ? `${MONTH_NAMES[monthIndex]} '${String(year).slice(2)}`
+                    : MONTH_NAMES[monthIndex],
+                Income: s.income || 0,
+                Expenses: s.expense || 0,
+            };
+        });
+    }, [summary, selectedYear, rangeMode]);
+
+    // ── Chart header label ─────────────────────────────────────────────────────
+    const chartSubLabel = useMemo(() => {
+        if (selectedYear !== "all") return `Full year ${selectedYear}`;
+        if (rangeMode === "6M") return "Last 6 months";
+        if (rangeMode === "1Y") return "Last 12 months";
+        return "All time";
+    }, [selectedYear, rangeMode]);
+
+    // ── Handler: switching range mode clears year selection ───────────────────
+    const handleRangeMode = (mode) => {
+        setRangeMode(mode);
+        setSelectedYear("all");
+    };
+
+    // ── Handler: switching year clears range pills ─────────────────────────────
+    const handleYearSelect = (e) => {
+        setSelectedYear(e.target.value);
+        if (e.target.value !== "all") setRangeMode(null);
+        else setRangeMode("6M");
+    };
 
     if (loading) return (
         <DashboardLayout>
@@ -78,32 +150,12 @@ const Home = () => {
         ? ((totalIncome - totalExpense) / totalIncome * 100).toFixed(1)
         : 0;
 
-    // Format summary for line chart
-    const lineData = summary.map((s) => ({
-      month: s.month.slice(5, 7) === "01" ? "Jan"
-           : s.month.slice(5, 7) === "02" ? "Feb"
-           : s.month.slice(5, 7) === "03" ? "Mar"
-           : s.month.slice(5, 7) === "04" ? "Apr"
-           : s.month.slice(5, 7) === "05" ? "May"
-           : s.month.slice(5, 7) === "06" ? "Jun"
-           : s.month.slice(5, 7) === "07" ? "Jul"
-           : s.month.slice(5, 7) === "08" ? "Aug"
-           : s.month.slice(5, 7) === "09" ? "Sep"
-           : s.month.slice(5, 7) === "10" ? "Oct"
-           : s.month.slice(5, 7) === "11" ? "Nov"
-           : "Dec",
-      Income: s.income || 0,
-      Expenses: s.expense || 0,
-  }));
-
-    // Format categoryBreakdown for pie chart
     const pieData = categoryBreakdown.map((c) => ({
         name: c._id,
         value: c.total,
     }));
 
-    // Format for budget bar chart
-    const budgetBarData = categoryBreakdown.slice(0, 5).map((c, i) => ({
+    const budgetBarData = categoryBreakdown.slice(0, 5).map((c) => ({
         name: c._id,
         Spent: c.total,
     }));
@@ -177,14 +229,51 @@ const Home = () => {
 
                 {/* Charts Row */}
                 <div className="charts-row">
-                    {/* Line Chart */}
+                    {/* Line Chart — with filter controls */}
                     <div className="card">
                         <div className="card-header">
-                            <span className="card-title">Income vs Expenses</span>
-                            <span className="card-sub">Last 6 months</span>
+                            <div className="chart-header-left">
+                                <span className="card-title">Income vs Expenses</span>
+                                <span className="card-sub">{chartSubLabel}</span>
+                            </div>
+
+                            {/* ── Filter Controls ── */}
+                            <div className="chart-filters">
+                                {/* Range quick-pills — only shown when no specific year is chosen */}
+                                {selectedYear === "all" && (
+                                    <div className="range-pills">
+                                        {["6M", "1Y", "all"].map((r) => (
+                                            <button
+                                                key={r}
+                                                className={`range-pill ${rangeMode === r ? "active" : ""}`}
+                                                onClick={() => handleRangeMode(r)}
+                                            >
+                                                {r === "all" ? "All" : r}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Year dropdown */}
+                                <select
+                                    className="year-select"
+                                    value={selectedYear}
+                                    onChange={handleYearSelect}
+                                >
+                                    <option value="all">All years</option>
+                                    {availableYears.map((y) => (
+                                        <option key={y} value={y}>{y}</option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
+
                         {lineData.length === 0 ? (
-                            <div className="chart-empty">No data yet. Add transactions to see trends.</div>
+                            <div className="chart-empty">
+                                {selectedYear !== "all"
+                                    ? `No data for ${selectedYear}.`
+                                    : "No data yet. Add transactions to see trends."}
+                            </div>
                         ) : (
                             <ResponsiveContainer width="100%" height={200}>
                                 <LineChart data={lineData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
@@ -344,7 +433,6 @@ const Home = () => {
                                     )}
                                 </div>
 
-                                {/* Category bar chart */}
                                 {budgetBarData.length > 0 && (
                                     <ResponsiveContainer width="100%" height={130}>
                                         <BarChart data={budgetBarData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>

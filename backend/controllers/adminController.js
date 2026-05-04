@@ -9,18 +9,13 @@ const jwt = require("jsonwebtoken");
 exports.adminLogin = async (req, res) => {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password)
         return res.status(400).json({ message: "All fields are required" });
-    }
 
     try {
         const user = await User.findOne({ email, role: "admin" });
-        if (!user || !(await user.comparePassword(password))) {
+        if (!user || !(await user.comparePassword(password)))
             return res.status(401).json({ message: "Invalid admin credentials" });
-        }
-
-
-             console.log("USER FOUND:", user);
 
         const token = jwt.sign(
             { id: user._id, role: user.role },
@@ -29,12 +24,10 @@ exports.adminLogin = async (req, res) => {
         );
 
         const { password: _, resetPasswordToken, resetPasswordExpires, ...safeUser } = user._doc;
-             res.status(200).json({ id: user._id, user: safeUser, token });
 
-        res.status(200).json({ id: user._id, user, token });
+        // ONE response only
+        return res.status(200).json({ user: safeUser, token });
     } catch (err) {
-
-        console.log("ADMIN LOGIN ERROR:", err);
         res.status(500).json({ message: "Error during admin login", error: err.message });
     }
 };
