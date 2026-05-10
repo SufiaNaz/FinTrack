@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 // Uncomment when nodemailer is configured:
  const nodemailer = require("nodemailer");
+ const Brevo = require("@getbrevo/brevo");
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -109,31 +110,22 @@ exports.forgotPassword = async (req, res) => {
         // ── Send email via Nodemailer ──────────────────────────────────────
         // Configure .env: EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS
         //
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
         
-        await transporter.sendMail({
-            from: `"FinTrack" <${process.env.EMAIL_USER}>`,
-            to: user.email,
-            subject: "Password Reset Request",
-            html: `<p>Click the link below to reset your password (valid 1 hour):</p>
-                   <a href="${resetUrl}">${resetUrl}</a>`,
-        });
+        const client = Brevo.ApiClient.instance;
+client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
+
+const apiInstance = new Brevo.TransactionalEmailsApi();
+
+await apiInstance.sendTransacEmail({
+    sender: { email: process.env.EMAIL_USER, name: "FinTrack" },
+    to: [{ email: user.email }],
+    subject: "Password Reset Request",
+    htmlContent: `<p>Click the link below to reset your password (valid 1 hour):</p>
+                  <a href="${resetUrl}">${resetUrl}</a>`,
+});
         
-         await transporter.sendMail({
-             from: `"FinTrack" <${process.env.EMAIL_USER}>`,
-             to: user.email,
-             subject: "Password Reset Request",
-             html: `<p>Click the link below to reset your password (valid 1 hour):</p>
-                    <a href="${resetUrl}">${resetUrl}</a>`,
-         });
+        
+         
 
         // Temporary: return the URL directly (remove in production)  
         res.status(200).json({
