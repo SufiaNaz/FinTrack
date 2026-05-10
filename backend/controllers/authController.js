@@ -4,7 +4,7 @@ const crypto = require("crypto");
 // Uncomment when nodemailer is configured:
  const nodemailer = require("nodemailer");
  const Brevo = require("@getbrevo/brevo");
-
+ const SibApiV3Sdk = require("sib-api-v3-sdk");
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 const generateToken = (id) =>
@@ -111,19 +111,20 @@ exports.forgotPassword = async (req, res) => {
         // Configure .env: EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS
         //
         
-        const client = Brevo.ApiClient.instance;
-client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
-
-const apiInstance = new Brevo.TransactionalEmailsApi();
-
-await apiInstance.sendTransacEmail({
-    sender: { email: process.env.EMAIL_USER, name: "FinTrack" },
-    to: [{ email: user.email }],
-    subject: "Password Reset Request",
-    htmlContent: `<p>Click the link below to reset your password (valid 1 hour):</p>
-                  <a href="${resetUrl}">${resetUrl}</a>`,
-});
         
+
+        const defaultClient = SibApiV3Sdk.ApiClient.instance;
+        defaultClient.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
+        
+        const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+        
+        await apiInstance.sendTransacEmail({
+            sender: { email: process.env.EMAIL_USER, name: "FinTrack" },
+            to: [{ email: user.email }],
+            subject: "Password Reset Request",
+            htmlContent: `<p>Click the link below to reset your password (valid 1 hour):</p>
+                          <a href="${resetUrl}">${resetUrl}</a>`,
+        });  
         
          
 
