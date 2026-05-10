@@ -25,10 +25,14 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Token expired or invalid — clear storage and redirect to login
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            window.location.href = "/login";
+            const publicPaths = ["/login", "/signup", "/forgot-password", "/reset-password"];
+            const isPublic = publicPaths.some(p => window.location.pathname.startsWith(p));
+            
+            if (!isPublic) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                window.location.href = "/login";
+            }
         }
         return Promise.reject(error);
     }
