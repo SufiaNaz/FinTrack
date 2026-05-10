@@ -476,3 +476,108 @@
 }
 
 .confirm-delete-btn:hover { background: #ef4444; }
+
+
+/* ── Monthly Chart Card ── */
+.txp-chart-card {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.txp-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.txp-chart-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.txp-chart-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e5e7eb;
+    font-family: "Poppins", sans-serif;
+}
+
+.txp-chart-sub {
+    font-size: 11px;
+    color: #4b5563;
+    font-family: "Poppins", sans-serif;
+}
+
+/* ── Year pills ── */
+.txp-year-pills {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: #0d0d0d;
+    border: 1px solid #1e1e1e;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.txp-pill {
+    font-size: 10px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    color: #4b5563;
+    background: none;
+    border: none;
+    border-radius: 3px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.txp-pill:hover {
+    color: #9ca3af;
+    background: #1a1a1a;
+}
+
+.txp-pill.active {
+    background: #1e1e1e;
+    color: #10b981;
+}
+
+/* ── Legend ── */
+.txp-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.txp-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: #6b7280;
+    font-family: "Poppins", sans-serif;
+}
+
+.txp-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.txp-legend-dot.green { background: #10b981; }
+.txp-legend-dot.red   { background: #f87171; }
+
+/* ── Empty ── */
+.txp-empty {
+    font-size: 13px;
+    color: #4b5563;
+    text-align: center;
+    padding: 24px 0;
+    font-family: "Poppins", sans-serif;
+}

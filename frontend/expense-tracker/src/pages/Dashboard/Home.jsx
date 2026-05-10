@@ -298,7 +298,7 @@ const Home = () => {
                     <div className="card">
                         <div className="card-header">
                             <span className="card-title">Spending Breakdown</span>
-                            <span className="card-sub">By category</span>
+                            <span className="card-sub">This Month</span>
                         </div>
                         {pieData.length === 0 ? (
                             <div className="chart-empty">No expense data yet.</div>

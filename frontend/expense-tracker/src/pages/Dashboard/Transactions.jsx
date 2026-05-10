@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
 import "./Transactions.css";
@@ -21,7 +21,8 @@ const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-
+    const [txChartYear, setTxChartYear] = useState("all");
+    const [chartSummary, setChartSummary] = useState([]);
     // Modal state
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState("expense"); // "income" | "expense"
@@ -44,6 +45,30 @@ const Transactions = () => {
     // Delete confirmation
     const [deleteId, setDeleteId] = useState(null);
 
+    const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+const availableYears = useMemo(() => {
+    return [...new Set(chartSummary.map((s) => s.month.slice(0, 4)))].sort();
+}, [chartSummary]);
+
+const txChartData = useMemo(() => {
+    let data = [...chartSummary].sort((a, b) => a.month.localeCompare(b.month));
+    if (txChartYear !== "all") {
+        data = data.filter((s) => s.month.startsWith(txChartYear));
+    }
+    return data.map((s) => {
+        const year = parseInt(s.month.slice(0, 4));
+        const monthIndex = parseInt(s.month.slice(5, 7)) - 1;
+        return {
+            month: txChartYear === "all"
+                ? `${MONTH_NAMES[monthIndex]} '${String(year).slice(2)}`
+                : MONTH_NAMES[monthIndex],
+            income: s.income || 0,
+            expenses: s.expense || 0,
+        };
+    });
+}, [chartSummary, txChartYear]);
+
     const fetchTransactions = async () => {
         setLoading(true);
         try {
@@ -52,9 +77,13 @@ const Transactions = () => {
             if (filterCategory) params.category = filterCategory;
             if (filterFrom) params.from = filterFrom;
             if (filterTo) params.to = filterTo;
-
-            const { data } = await axiosInstance.get("/user/transaction", { params });
-            setTransactions(data);
+    
+            const [txRes, sumRes] = await Promise.all([
+                axiosInstance.get("/user/transaction", { params }),
+                axiosInstance.get("/user/summary"),
+            ]);
+            setTransactions(txRes.data);
+            setChartSummary(sumRes.data);
         } catch {
             setError("Failed to load transactions.");
         } finally {
@@ -216,6 +245,7 @@ const Transactions = () => {
                     <button className="clear-btn" onClick={clearFilters}>Clear</button>
                 </div>
 
+                
                 {/* Transaction List */}
                 {loading ? (
                     <div className="tx-empty">Loading...</div>
@@ -371,6 +401,123 @@ const Transactions = () => {
                     </div>
                 </div>
             )}
+
+            {/* Monthly Chart */}
+{chartSummary.length > 0 && (
+    <div className="txp-chart-card">
+        <div className="txp-chart-header">
+            <div className="txp-chart-title-group">
+                <span className="txp-chart-title">Monthly Overview</span>
+                <span className="txp-chart-sub">
+                    {txChartYear === "all" ? "All time" : txChartYear}
+                </span>
+            </div>
+            <div className="txp-year-pills">
+                <button
+                    className={`txp-pill ${txChartYear === "all" ? "active" : ""}`}
+                    onClick={() => setTxChartYear("all")}
+                >
+                    All
+                </button>
+                {availableYears.map((y) => (
+                    <button
+                        key={y}
+                        className={`txp-pill ${txChartYear === y ? "active" : ""}`}
+                        onClick={() => setTxChartYear(y)}
+                    >
+                        {y}
+                    </button>
+                ))}
+            </div>
+        </div>
+
+        {txChartData.length === 0 ? (
+            <div className="txp-empty">No data for {txChartYear}.</div>
+        ) : (
+            <>
+                <svg
+                    viewBox="0 0 600 160"
+                    preserveAspectRatio="none"
+                    style={{ width: "100%", height: "160px", display: "block" }}
+                >
+                    {(() => {
+                        const maxVal = Math.max(...txChartData.flatMap(d => [d.income, d.expenses]), 1);
+                        const padL = 48, padR = 12, padT = 10, padB = 28;
+                        const W = 600, H = 160;
+                        const chartW = W - padL - padR;
+                        const chartH = H - padT - padB;
+                        const cols = txChartData.length;
+                        const colW = chartW / cols;
+                        const barW = Math.min(colW * 0.28, 18);
+                        const yTicks = [0, 0.25, 0.5, 0.75, 1];
+
+                        return (
+                            <g>
+                                {/* Grid lines + Y labels */}
+                                {yTicks.map((t, i) => {
+                                    const y = padT + chartH * (1 - t);
+                                    const val = Math.round(maxVal * t);
+                                    const label = val >= 1000 ? Math.round(val / 1000) + "k" : val;
+                                    return (
+                                        <g key={i}>
+                                            <line x1={padL} x2={W - padR} y1={y} y2={y}
+                                                stroke="#1e1e1e" strokeWidth="1" />
+                                            <text x={padL - 6} y={y + 4}
+                                                textAnchor="end" fontSize="9" fill="#4b5563"
+                                                fontFamily="Poppins, sans-serif">
+                                                {label}
+                                            </text>
+                                        </g>
+                                    );
+                                })}
+
+                                {/* Bars */}
+                                {txChartData.map((d, i) => {
+                                    const cx = padL + colW * i + colW / 2;
+                                    const iH = (d.income / maxVal) * chartH;
+                                    const eH = (d.expenses / maxVal) * chartH;
+                                    return (
+                                        <g key={i}>
+                                            <rect
+                                                x={cx - barW - 1}
+                                                y={padT + chartH - iH}
+                                                width={barW} height={Math.max(iH, 0)}
+                                                fill="#10b981" rx="2"
+                                            />
+                                            <rect
+                                                x={cx + 1}
+                                                y={padT + chartH - eH}
+                                                width={barW} height={Math.max(eH, 0)}
+                                                fill="#f87171" rx="2"
+                                            />
+                                            <text x={cx} y={H - padB + 14}
+                                                textAnchor="middle" fontSize="8" fill="#4b5563"
+                                                fontFamily="Poppins, sans-serif">
+                                                {d.month}
+                                            </text>
+                                        </g>
+                                    );
+                                })}
+                            </g>
+                        );
+                    })()}
+                </svg>
+
+                <div className="txp-legend">
+                    <span className="txp-legend-item">
+                        <span className="txp-legend-dot green" />
+                        Income
+                    </span>
+                    <span className="txp-legend-item">
+                        <span className="txp-legend-dot red" />
+                        Expenses
+                    </span>
+                </div>
+            </>
+        )}
+    </div>
+)}
+
         </DashboardLayout>
     );
 };

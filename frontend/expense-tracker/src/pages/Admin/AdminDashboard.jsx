@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axiosInstance from "../../utils/axiosInstance";
-import "./AdminDashboard.css";
+import "./Admindashboard.css";
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
