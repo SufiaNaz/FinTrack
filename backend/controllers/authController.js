@@ -109,14 +109,23 @@ exports.forgotPassword = async (req, res) => {
         // ── Send email via Nodemailer ──────────────────────────────────────
         // Configure .env: EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS
         //
-         const transporter = nodemailer.createTransport({
-             host: process.env.EMAIL_HOST,
-             port: process.env.EMAIL_PORT,
-             auth: {
-                 user: process.env.EMAIL_USER,
-                 pass: process.env.EMAIL_PASS,
-             },
-         });
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+        
+        await transporter.sendMail({
+            from: `"FinTrack" <${process.env.EMAIL_USER}>`,
+            to: user.email,
+            subject: "Password Reset Request",
+            html: `<p>Click the link below to reset your password (valid 1 hour):</p>
+                   <a href="${resetUrl}">${resetUrl}</a>`,
+        });
         
          await transporter.sendMail({
              from: `"FinTrack" <${process.env.EMAIL_USER}>`,
