@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./forgotPassword.css";
-import axios from "axios";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
@@ -26,10 +25,7 @@ const handleSubmit = async (e) => {
 
     setLoading(true);
     try {
-        await axios.post(
-            "https://fintrack-89m0.onrender.com/api/v1/user/forgot-password",
-            { email: trimmed }
-        );
+        await forgotPassword(trimmed);
         setSuccess(true);
     } catch {
         setSuccess(true);
