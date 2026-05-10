@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
         "Content-Type": "application/json",
     },
 });
- 
+console.log("API URL:", import.meta.env.VITE_API_BASE_URL); 
 // ── Request interceptor — attach JWT token to every request ────────────────
 axiosInstance.interceptors.request.use(
     (config) => {
