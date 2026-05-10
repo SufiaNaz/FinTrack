@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./forgotPassword.css";
+import axios from "axios";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
@@ -11,26 +12,31 @@ const ForgotPassword = () => {
 
     const { forgotPassword } = useAuth();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
+    
 
-        const trimmed = email.trim();
-        if (!trimmed.includes("@") || !trimmed.includes(".")) {
-            return setError("Please enter a valid email address");
-        }
+// Replace the handleSubmit with this:
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-        setLoading(true);
-        try {
-            await forgotPassword(trimmed);
-            setSuccess(true); // Show success state regardless (prevents user enumeration)
-        } catch {
-            // Still show success — don't reveal whether email exists
-            setSuccess(true);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const trimmed = email.trim();
+    if (!trimmed.includes("@") || !trimmed.includes(".")) {
+        return setError("Please enter a valid email address");
+    }
+
+    setLoading(true);
+    try {
+        await axios.post(
+            "https://fintrack-89m0.onrender.com/api/v1/user/forgot-password",
+            { email: trimmed }
+        );
+        setSuccess(true);
+    } catch {
+        setSuccess(true);
+    } finally {
+        setLoading(false);
+    }
+};
 
     if (success) {
         return (
