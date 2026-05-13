@@ -2,12 +2,12 @@ import axios from "axios";
  
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1",
-    timeout: 90000,
+    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
     },
 });
-console.log("API URL:", import.meta.env.VITE_API_BASE_URL); 
+ 
 // ── Request interceptor — attach JWT token to every request ────────────────
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -25,14 +25,10 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            const publicPaths = ["/login", "/signup", "/forgot-password", "/reset-password"];
-            const isPublic = publicPaths.some(p => window.location.pathname.startsWith(p));
-            
-            if (!isPublic) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                window.location.href = "/login";
-            }
+            // Token expired or invalid — clear storage and redirect to login
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "/login";
         }
         return Promise.reject(error);
     }

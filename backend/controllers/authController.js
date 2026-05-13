@@ -3,8 +3,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 // Uncomment when nodemailer is configured:
  const nodemailer = require("nodemailer");
- const Brevo = require("@getbrevo/brevo");
- const SibApiV3Sdk = require("sib-api-v3-sdk");
+
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 const generateToken = (id) =>
@@ -81,7 +80,7 @@ exports.logoutUser = async (req, res) => {
 
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
-
+    
     if (!email) {
         return res.status(400).json({ message: "Email is required" });
     }
@@ -110,23 +109,22 @@ exports.forgotPassword = async (req, res) => {
         // ── Send email via Nodemailer ──────────────────────────────────────
         // Configure .env: EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS
         //
+         const transporter = nodemailer.createTransport({
+             host: process.env.EMAIL_HOST,
+             port: process.env.EMAIL_PORT,
+             auth: {
+                 user: process.env.EMAIL_USER,
+                 pass: process.env.EMAIL_PASS,
+             },
+         });
         
-        
-
-        const defaultClient = SibApiV3Sdk.ApiClient.instance;
-        defaultClient.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
-        
-        const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-        
-        await apiInstance.sendTransacEmail({
-            sender: { email: process.env.EMAIL_USER, name: "FinTrack" },
-            to: [{ email: user.email }],
-            subject: "Password Reset Request",
-            htmlContent: `<p>Click the link below to reset your password (valid 1 hour):</p>
-                          <a href="${resetUrl}">${resetUrl}</a>`,
-        });  
-        
-         
+         await transporter.sendMail({
+             from: `"FinTrack" <${process.env.EMAIL_USER}>`,
+             to: user.email,
+             subject: "Password Reset Request",
+             html: `<p>Click the link below to reset your password (valid 1 hour):</p>
+                    <a href="${resetUrl}">${resetUrl}</a>`,
+         });
 
         // Temporary: return the URL directly (remove in production)  
         res.status(200).json({

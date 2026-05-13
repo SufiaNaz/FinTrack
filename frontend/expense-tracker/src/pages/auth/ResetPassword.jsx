@@ -80,7 +80,7 @@ const ResetPassword = () => {
                         required
                     />
 
-                    <label style={{ fontSize: "13px", color: "#575cb5", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
+                    <label style={{ fontSize: "13px", color: "#059669", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
                         <input
                             type="checkbox"
                             checked={showPassword}

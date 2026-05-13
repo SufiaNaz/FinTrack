@@ -18,24 +18,20 @@ const app = express();
 
 // ── Middleware ─────────────────────────────────────────────────────────────
 const allowedOrigins = [
-    "http://localhost:5173",
     "https://fin-track-pi-one.vercel.app",
-];
-
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allow by CORS"));
-            }
-        },
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true,
-    })
-);
+    "http://localhost:5173"  
+  ];
+  
+  app.use(cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true  // keep this if you're sending cookies/auth headers
+  }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

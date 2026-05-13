@@ -20,12 +20,12 @@ export const AuthProvider = ({ children }) => {
                 const { data } = await axiosInstance.get("/user/getUser");
                 setUser(data);
                 setToken(savedToken);
-            } catch (err) {
+            } catch {
+                // Token invalid or expired — clear everything
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
                 setUser(null);
                 setToken(null);
-                // Don't redirect here — let the router handle it
             } finally {
                 setLoading(false);
             }

@@ -11,28 +11,26 @@ const ForgotPassword = () => {
 
     const { forgotPassword } = useAuth();
 
-    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
 
-// Replace the handleSubmit with this:
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+        const trimmed = email.trim();
+        if (!trimmed.includes("@") || !trimmed.includes(".")) {
+            return setError("Please enter a valid email address");
+        }
 
-    const trimmed = email.trim();
-    if (!trimmed.includes("@") || !trimmed.includes(".")) {
-        return setError("Please enter a valid email address");
-    }
-
-    setLoading(true);
-    try {
-        await forgotPassword(trimmed);
-        setSuccess(true);
-    } catch {
-        setSuccess(true);
-    } finally {
-        setLoading(false);
-    }
-};
+        setLoading(true);
+        try {
+            await forgotPassword(trimmed);
+            setSuccess(true); // Show success state regardless (prevents user enumeration)
+        } catch {
+            // Still show success — don't reveal whether email exists
+            setSuccess(true);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     if (success) {
         return (
