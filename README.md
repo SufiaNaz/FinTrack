@@ -86,5 +86,8 @@ ANTHROPIC_API_KEY=your_anthropic_api_key
 Frontend .env
 VITE_API_BASE_URL=http://localhost:5000/api/v1
 
+<img width="1366" height="768" alt="Screenshot (705)" src="https://github.com/user-attachments/assets/63eeedb4-1e02-41c9-9a25-9a9b118f716d" />
+
+
 Built by Sufia Naz
 
