@@ -120,5 +120,12 @@ ADMIN TRANSACTIONS PAGE
 <img width="1366" height="768" alt="Screenshot (726)" src="https://github.com/user-attachments/assets/a4dbd7b3-a09e-4e59-a350-5acee9f1559a" />
 
 
+ARCHITECTURE
+<img width="1015" height="818" alt="image" src="https://github.com/user-attachments/assets/e90ee58d-59a0-4a77-9a1d-ee3cd1cbe44f" />
+
+ER DIAGRAM
+<img width="1015" height="846" alt="image" src="https://github.com/user-attachments/assets/a8e75dbe-888c-49e4-ae30-564f0278d548" />
+
+
 Built by Sufia Naz
 
