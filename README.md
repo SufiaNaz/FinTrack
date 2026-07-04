@@ -98,7 +98,26 @@ LOGIN PAGE
 USER DASHBOARD
 <img width="1366" height="768" alt="Screenshot (713)" src="https://github.com/user-attachments/assets/b0c939be-0c3b-47bb-b828-98726609be22" />
 
+USER TRANSACTION PAGE
+<img width="1366" height="768" alt="Screenshot (715)" src="https://github.com/user-attachments/assets/bb12b822-c8a7-426c-a419-b637a5eba862" />
 
+USER BUDGET PAGE
+<img width="1366" height="768" alt="Screenshot (719)" src="https://github.com/user-attachments/assets/953b497a-171c-428c-adeb-267c754cc435" />
+
+USER REPORTS PAGE
+<img width="1366" height="768" alt="Screenshot (720)" src="https://github.com/user-attachments/assets/3480157b-9527-4566-b003-efbfeeb5e5ee" />
+
+USER NOTIFICATION PAGE
+<img width="1366" height="768" alt="Screenshot (723)" src="https://github.com/user-attachments/assets/b1018605-b059-49b1-a749-9cf52373a07f" />
+
+ADMIN DASHBOARD PAGE
+<img width="1366" height="768" alt="Screenshot (724)" src="https://github.com/user-attachments/assets/7d5997ab-0a68-41d1-81a6-de247c15080c" />
+
+ADMIN USERS PAGE
+<img width="1366" height="768" alt="Screenshot (725)" src="https://github.com/user-attachments/assets/b54a7a50-6586-424f-8c98-4a403fd635ae" />
+
+ADMIN TRANSACTIONS PAGE
+<img width="1366" height="768" alt="Screenshot (726)" src="https://github.com/user-attachments/assets/a4dbd7b3-a09e-4e59-a350-5acee9f1559a" />
 
 
 Built by Sufia Naz
